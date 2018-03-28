@@ -1,0 +1,16 @@
+body{
+    -webkit-font-smoothing: antialiased;
+    background: #efefef;
+    color: #555555;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.wrap{
+    margin: 20px 0;
+    padding: 0 20px;
+    background: #ffffff;
+}
+.breadcrumb{
+    background: none;
+}
