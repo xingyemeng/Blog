@@ -2,9 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Blog 后台管理</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/common.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
 </head>
 <body>
-$END$
+    <div class="wrapper">
+        <header>
+            <div class="container-fluid head border-bottom">
+                <h3>后台管理系统</h3>
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">分类管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">文章管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <div class="content">
+            <div class="row">
+                <div class="left col-3 border-right">
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="#">分类列表</a></li>
+                        <li class="list-group-item"><a href="#">添加分类</a></li>
+                    </ul>
+                </div>
+                <div class="right col-9">
+                    <div class="container">
+                        <div class="item-head border-bottom">
+                            <div class="current">
+                                分类列表
+                            </div>
+                        </div>
+                        <div class="item-con">
+                            <div class="row t-head">
+                                <div class="col-sm-4">分类名称</div>
+                                <div class="col-sm">状态</div>
+                                <div class="col-sm">文章数</div>
+                                <div class="col-sm">操作</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">php</div>
+                                <div class="col-sm">开启</div>
+                                <div class="col-sm">4</div>
+                                <div class="col-sm">
+                                    <a href="#">删除</a>|<a href="#">修改</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
 </body>
 </html>
