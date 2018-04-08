@@ -2,22 +2,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var user = Schema({
-    username : 'string',
+var users = new Schema({
+    name : 'string',
     password : 'string',
-    num:{
-        type: Number,
-        get: function (t) {
-            return Math.round(t);
-        }
-    },
-    posts : [{type: Schema.Types.ObjectId, ref: 'Arctic'}]
+    posts : [{type: Schema.Types.ObjectId, ref: 'Arctics'}]
 });
 
-var Test = mongoose.model('Test',user);
-var doc = new Test();
-doc.num = 2.001;
-console.log(doc.num);
-module.exports = user;
+
+
+module.exports = users;
 
 

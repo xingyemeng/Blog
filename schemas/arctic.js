@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var user = Schema({
+var arctics = Schema({
     title : 'string',
     content : 'string',
     author : {type: Schema.Types.ObjectId, ref: 'User'},
@@ -11,6 +11,6 @@ var user = Schema({
     pid : [{type: Schema.Types.ObjectId, ref: 'Category'}]
 });
 
-module.exports = user;
+module.exports = arctics;
 
 
