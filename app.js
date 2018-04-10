@@ -1,5 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var session = require('express-session');
 
 var app = express();
 
@@ -11,10 +12,20 @@ app.set('view engine','html');
 //设置公共路径
 app.use('/public', express.static(__dirname + '/public'));
 //路由 装载点 test
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {}}));
+app.get('/',function (req, res, next) {
+    console.log(req.session);
+    return;
+})
 app.use('/',require(__dirname+'/routers/main.js'));
 app.use('/admin',require(__dirname+'/routers/admin.js'));
 
 //app.use('/admin',router); 应用级中不用路由级
+
 
 mongoose.connect('mongodb://localhost/blog',function (err) {
     if(err){

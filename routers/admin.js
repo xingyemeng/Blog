@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../modules/User.js');
 var Arctics = require('../modules/Arctics');
-var Arctics = require('../modules/Catagory');
+var Catagories = require('../modules/Catagory');
 
 
 /*User.findOne({name: 'admin'},function (err,user) {
@@ -16,9 +16,12 @@ var Arctics = require('../modules/Catagory');
 });*/
 
 Arctics.findOne({title: 'nodejs blog'}).populate('author').exec(function (err,arctic) {
-    console.log(arctic);
+    //console.log(arctic);
 })
 
+router.all(function (req, res, next) {
+
+});
 router.get('/',function (req,res,next) {
     res.render('admin/index');
 });
