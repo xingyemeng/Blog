@@ -19,11 +19,19 @@ Arctics.findOne({title: 'nodejs blog'}).populate('author').exec(function (err,ar
     //console.log(arctic);
 })
 
-router.all(function (req, res, next) {
+router.all('*',function (req, res, next) {
+    if(req.session.username){
 
+        next();
+    }else {
+        console.log(req.session.cookie.username);
+        res.redirect('api/login');
+    }
 });
 router.get('/',function (req,res,next) {
     res.render('admin/index');
 });
+
+
 
 module.exports = router;

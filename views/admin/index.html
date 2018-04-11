@@ -58,6 +58,7 @@
                                 <div class="col-sm">4</div>
                                 <div class="col-sm">
                                     <a href="#">删除</a>|<a href="#">修改</a>
+                                    <a href="javascript:void (0)" id="logout">退出</a>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +69,20 @@
 
 
         </div>
-    </div>
 
+    </div>
+    <script>
+        $(function () {
+            $('#logout').click(function () {
+                $.ajax({
+                    type: 'post',
+                    url: 'api/logout',
+                    success: function (err,result) {
+                        alert(result);
+                    }
+                });
+            });
+        })
+    </script>
 </body>
 </html>
