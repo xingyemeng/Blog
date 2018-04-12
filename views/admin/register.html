@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="Register">
 <head>
     <meta charset="UTF-8">
     <title>blog register</title>
@@ -9,29 +9,55 @@
     <link rel="stylesheet" href="/public/css/style.css">
     <script src="/public/js/jquery.js"></script>
     <script src="/public/js/bootstrap.min.js"></script>
+    <script src="/public/js/angular.min.js"></script>
 </head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <form action="" method="post">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword2">Password</label>
-                        <input type="password" name="repassword" class="form-control" id="exampleInputPassword2" placeholder="rePassword">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+<body ng-controller="re-ctrl">
+    <div class="login" style="margin-top:100px">
+        <div class="container">
+            <div class="row  justify-content-center">
+                <div class="col-lg-4">
+                    <form action="" method="post" name="regForm">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="text" name="username" ng-blur="checkOut()" ng-model="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="nameExist" class="form-text text-danger" ng-show="regForm.username.$dirty && flag">用户名已存在</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" name="password" ng-model="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword2">rePassword</label>
+                            <input type="password" name="repassword" ng-model="repassword" class="form-control" id="exampleInputPassword2" placeholder="rePassword">
+                            <small id="passValid" class="form-text text-danger" ng-show="password == ">两次输入密码不一致</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        var app = angular.module('Register',[]);
+            app.controller('re-ctrl',function ($scope,$http) {
+                $scope.username = '';
+                $http.get('/api/userList')
+                    .success(function (data) {
+                        $scope.users = data;
+                    }).error(function (err) {
+                        $scope.err = err;
+                });
+                $scope.checkOut = function () {
+                    $scope.users.forEach(function (t) {
+                        if(t.name == $scope.username){
+                            $scope.flag = true;
+                        }else{
+                            $scope.flag = false;
+                        }
+                    });
+                }
+            });
+
+    </script>
 </body>
 </html>

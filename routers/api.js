@@ -1,4 +1,5 @@
 var express = require('express');
+var crypto = require('crypto');
 var router = express.Router();
 var User = require('../modules/User.js');
 var Arctics = require('../modules/Arctics');
@@ -27,11 +28,23 @@ router.get('/register',function (req,res) {
 });
 //注册数据提交
 router.post('/register',function (req, res, next) {
-    User.findOne({name: req.body.username},function (err,user) {
-        if(user){
-            res.send('注册失败，用户名已存在！')
+    var user = new User({
+        name : req.body.username,
+        password: crypto.createHash('md5').update(req.body.password, 'utf8').digest("hex")
+    });
+    user.save(function (err,tank) {
+        if(err) return err;
+        res.send(tank);
+    });
+})
+//获取已有的用户列表
+router.get('/userList',function (req,res) {
+    User.find(function (err,users) {
+        if(users){
+            res.send(users);
+        }else{
+            res.send('')
         }
     })
-})
-
+});
 module.exports = router;

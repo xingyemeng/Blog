@@ -31,7 +31,4 @@ router.all('*',function (req, res, next) {
 router.get('/',function (req,res,next) {
     res.render('admin/index');
 });
-
-
-
 module.exports = router;
