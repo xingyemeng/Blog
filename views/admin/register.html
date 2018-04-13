@@ -16,22 +16,22 @@
         <div class="container">
             <div class="row  justify-content-center">
                 <div class="col-lg-4">
-                    <form action="" method="post" name="regForm">
+                    <form ng-submit="regFormPost()" name="regForm">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
-                            <input type="text" name="username" ng-blur="checkOut()" ng-model="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                            <input type="text" name="username" ng-blur="checkOut()" ng-model="user.username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                             <small id="nameExist" class="form-text text-danger" ng-show="regForm.username.$dirty && flag">用户名已存在</small>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" name="password" ng-model="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+                            <input type="password" name="password" ng-model="user.password" class="form-control" id="exampleInputPassword1" placeholder="password">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword2">rePassword</label>
-                            <input type="password" name="repassword" ng-model="repassword" class="form-control" id="exampleInputPassword2" placeholder="rePassword">
-                            <small id="passValid" class="form-text text-danger" ng-show="password == ">两次输入密码不一致</small>
+                            <input type="password" name="repassword" ng-model="repassword" ng-blur="passCheck()" class="form-control" id="exampleInputPassword2" placeholder="rePassword">
+                            <small id="passValid" class="form-text text-danger" ng-show="passFlag">两次输入密码不一致</small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" ng-disabled="flag || passFlag" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
@@ -40,20 +40,41 @@
     <script>
         var app = angular.module('Register',[]);
             app.controller('re-ctrl',function ($scope,$http) {
-                $scope.username = '';
+                $scope.user = {};
                 $http.get('/api/userList')
                     .success(function (data) {
                         $scope.users = data;
                     }).error(function (err) {
                         $scope.err = err;
                 });
+
                 $scope.checkOut = function () {
+                    $scope.flag = false;
                     $scope.users.forEach(function (t) {
-                        if(t.name == $scope.username){
+                        if(t.name == $scope.user.username){
                             $scope.flag = true;
-                        }else{
-                            $scope.flag = false;
                         }
+                    });
+                };
+                $scope.passFlag = false;
+                $scope.passCheck = function () {
+                    if($scope.user.password != $scope.repassword){
+                        $scope.passFlag = true;
+                    }else {
+                        $scope.passFlag = false;
+                    }
+                };
+                $scope.regFormPost = function () {
+                    $http({
+                        method: 'post',
+                        url: '/api/register',
+                        data: $scope.user
+                    }).success(function (data) {
+
+                        location.replace('/api/login');
+                        alert(data.msg);
+                    }).error(function(err){
+                        console.log(err);
                     });
                 }
             });

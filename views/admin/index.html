@@ -65,11 +65,7 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
-
     </div>
     <script>
         $(function () {
@@ -77,7 +73,7 @@
                 $.ajax({
                     type: 'post',
                     url: 'api/logout',
-                    success: function (err,result) {
+                    success: function (result) {
                         alert(result);
                     }
                 });
