@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var rbac = require('mongoose-rbac');
 
-var users = new Schema({
+var users = Schema({
     name : 'string',
     password : 'string',
     posts : [{type: Schema.Types.ObjectId, ref: 'Arctics'}]

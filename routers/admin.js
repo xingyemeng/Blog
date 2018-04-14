@@ -15,13 +15,13 @@ var Catagories = require('../modules/Catagory');
     arctics.save();
 });*/
 
+
 Arctics.findOne({title: 'nodejs blog'}).populate('author').exec(function (err,arctic) {
     //console.log(arctic);
 })
 
 router.all('*',function (req, res, next) {
     if(req.session.username){
-
         next();
     }else {
         console.log(req.session.cookie.username);
