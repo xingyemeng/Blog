@@ -31,6 +31,7 @@
                             <input type="password" name="repassword" ng-model="repassword" ng-blur="passCheck()" class="form-control" id="exampleInputPassword2" placeholder="rePassword">
                             <small id="passValid" class="form-text text-danger" ng-show="passFlag">两次输入密码不一致</small>
                         </div>
+                        <input type="hidden" value="">
                         <button type="submit" ng-disabled="flag || passFlag" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
