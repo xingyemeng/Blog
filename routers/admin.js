@@ -1,4 +1,5 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var router = express.Router();
 var User = require('../modules/User.js');
 var Arctics = require('../modules/Arctics');
@@ -10,9 +11,28 @@ var rbac = require('mongoose-rbac')
     , Role = rbac.Role
     , permissions;
 
-//查找当前页面的权限
-function checkPermission() {
 
+//将对象元素转换成字符串以作比较
+function obj2key(obj, keys){
+    var n = keys.length,
+        key = [];
+    while(n--){
+        key.push(obj[keys[n]]);
+    }
+    return key.join('|');
+}
+//去重操作
+function uniqeByKeys(array,keys){
+    var arr = [];
+    var hash = {};
+    for (var i = 0, j = array.length; i < j; i++) {
+        var k = obj2key(array[i], keys);
+        if (!(k in hash)) {
+            hash[k] = true;
+            arr .push(array[i]);
+        }
+    }
+    return arr ;
 }
 /*User.findOne({name: 'admin'},function (err,user) {
     var arctics = new Arctics({
@@ -65,7 +85,7 @@ router.get('/',function (req,res,next) {
                     }
                 }
             }
-            console.log(navList);
+            navList = uniqeByKeys(navList,['name']);
             res.render('admin/index',{
                 navList: navList
             });
@@ -74,21 +94,40 @@ router.get('/',function (req,res,next) {
     });
 });
 router.get('/permission',function (req,res,next) {
-    User.findOne({name: req.session.username},function (err,user) {
+
+    res.render('admin/per/permission');
+});
+//查找当前页面的权限
+function checkPermission(curName) {
+    var curId = mongoose.Schema.Types.ObjectId;
+    Resource.findOne({name:'权限管理'},function (err,resource) {
         if(err) return handle(err);
-        Role.find({_id: user.roles}).populate('permissions').exec(function (err,role) {
+        curId = resource._id;
+    })
+    User.findOne({name: curName},function (err,user) {
+        if(err) return handle(err);
+        Role.find({_id: user.roles}).populate({
+            path: 'permissions'
+        }).exec(function (err,role) {
             for(var i=0;i<role.length;i++){
                 for(var j=0;j<role[i].permissions.length;j++){
-                    if(role[i].permissions[j].subject == '权限管理'){
-                        Permission.find({subject: role[i].permissions[j].subject},function (err,pers) {
-                            console.log(pers);
-                        });
-                        break;
-                    }
+                    console.log('_id:' + role[i].permissions[j].subject);
+                    console.log(role[i].permissions[j].subject  == curId);
+                    console.log('curId:' + curId);
+
+                    Resource.find([{pId: role[i].permissions[j].subject},[level: ]],function (err,resource) {
+                        console.log(resource);
+                    });
+
+
                 }
             }
         });
     });
+}
+//导航栏的权限管理路由
+router.get('/perList',function (req, res, next) {
+    checkPermission(req.session.username);
     res.render('admin/per/permission');
-});
+})
 module.exports = router;
