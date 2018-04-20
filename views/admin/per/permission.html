@@ -1,10 +1,41 @@
-<%- include('header') -%>
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+    <meta charset="UTF-8">
+    <title>Blog 后台管理-权限管理</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/common.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <div class="container-fluid head border-bottom">
+            <h3>后台管理系统</h3>
+            <ul class="nav nav-pills">
+                <% for(var i=0; i<navList.length;i++) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="<%= navList[i].path %>">
+                        <%= navList[i].name %>
+                    </a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </header>
         <div class="content">
             <div class="row">
                 <div class="left col-3 border-right">
                     <ul class="list-group">
-                        <li class="list-group-item"><a href="#">角色管理</a></li>
-                        <li class="list-group-item"><a href="#">权限管理</a></li>
+                        <% for(var i=0; i<leftList.length;i++) { %>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="<%= leftList[i].url %>">
+                                <%= leftList[i].name %>
+                            </a>
+                        </li>
+                        <% } %>
                     </ul>
                 </div>
                 <div class="right col-9">
