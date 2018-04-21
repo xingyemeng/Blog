@@ -1,32 +1,5 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="blogAdmin">
-<head>
-    <meta charset="UTF-8">
-    <title>Blog 后台管理</title>
-    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/public/css/common.css">
-    <link rel="stylesheet" href="/public/css/style.css">
-    <script src="/public/js/jquery.js"></script>
-    <script src="/public/js/bootstrap.min.js"></script>
-    <script src="/public/js/angular.min.js"></script>
-</head>
-<body>
-    <div class="wrapper" ng-controller="adminCtrl">
-        <header>
-            <div class="container-fluid head border-bottom">
-                <h3>后台管理系统</h3>
-                <ul class="nav nav-pills">
-                    <% for(var i=0; i<navList.length;i++) { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<%= navList[i].path %>">
-                            <%= navList[i].name %>
-                        </a>
-                    </li>
-                    <% } %>
-                </ul>
-            </div>
-        </header>
-        <div class="content">
+<%- include('per/header') %>
+        <div class="content" ng-controller="adminCtrl">
             <div class="row">
                 <div class="left col-3 border-right">
                     <ul class="list-group">
@@ -74,11 +47,7 @@
                 });
             });
         });
-        var blogAdmin = angular.module('blogAdmin',[]);
-        blogAdmin.controller('adminCtrl',function ($scope) {
-            console.log(navList);
-            $scope.navList = navList;
-        })
+
 
     </script>
 </body>

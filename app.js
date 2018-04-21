@@ -29,7 +29,7 @@ app.use(session({
 app.get('/',function (req, res, next) {
     console.log(req.session.cookie.path);
     next();
-})
+});
 app.use('/',require(__dirname+'/routers/main.js'));
 app.use('/api',require('./routers/api'));
 app.use('/admin',require(__dirname+'/routers/admin.js'));

@@ -128,12 +128,10 @@ function checkPermission(curName, callback) {
 //导航栏的权限管理路由
 router.get('/perList',function (req, res, next) {
     checkPermission(req.session.username, function (leftList) {
-        console.log(leftList);
         res.render('admin/per/permission',{
             navList: res.locals.navList,
             leftList: leftList
         });
     });
-
 })
 module.exports = router;

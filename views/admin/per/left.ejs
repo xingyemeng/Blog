@@ -1,0 +1,11 @@
+<div class="left col-3 border-right">
+    <ul class="list-group">
+        <% for(var i=0; i<leftList.length;i++) { %>
+        <li class="list-group-item">
+            <a class="nav-link" href="<%= leftList[i].url %>">
+                <%= leftList[i].name %>
+            </a>
+        </li>
+        <% } %>
+    </ul>
+</div>

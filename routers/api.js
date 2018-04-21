@@ -125,4 +125,5 @@ Permission.create(permissions, function (err) {
         
     })
 })*/
+
 module.exports = router;
