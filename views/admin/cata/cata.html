@@ -6,7 +6,7 @@
                     <div class="container">
                         <div class="item-head border-bottom">
                             <div class="current">
-                                权限列表
+                                分类管理
                             </div>
                         </div>
                         <div class="item-con">
@@ -18,7 +18,7 @@
                                         </div>
                                         <div class="card-body">
                                             <ul id="treeDemo" class="ztree"></ul>
-                                            <button type="button" ng-click="sourceSubmit()" class="btn-sm btn-primary">保存</button>
+                                            <button onclick="tteest()" class="btn-sm btn-primary">提交</button>
                                         </div>
                                     </div>
                                 </div>
@@ -30,6 +30,17 @@
         </div>
     </div>
     <script>
+        $(function () {
+            $('#logout').click(function () {
+                $.ajax({
+                    type: 'post',
+                    url: '/api/logout',
+                    success: function (result) {
+                        alert(result);
+                    }
+                });
+            });
+        });
         blogAdmin.controller('perMange',function ($scope,$http) {
             var zTreeObj;
             var setting = {
@@ -57,42 +68,33 @@
                     return false;
                 });
             };*/
-            $scope.sourceSubmit = function () {
+            $scope.tteest = function () {
                 var zObj = $.fn.zTree.getZTreeObj('treeDemo');
-                console.log(zObj.transformToArray(zObj.getNodes()));
+                console.log(zObj.getNodes());
             }
-            var newCount = 0;
+            var newCount = 1;
             function addHoverDom(treeId, treeNode) {
                 var sObj = $("#" + treeNode.tId + "_span");
                 if ($("#addBtn_"+treeNode.tId).length>0) return;
-                var editStr = "<span class='button add' id='addBtn_" +treeNode.tId+ "' onfocus='this.blur();' ></span>";
+                var editStr = "<span class='button add' id='addBtn_" +treeNode.tId+ "' onfocus='this.blur();' > </span>";
                 sObj.append(editStr);
                 var btn = $("#addBtn_"+treeNode.tId);
                 if (btn) btn.bind("click", function(){
                     var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-                    var newId = uuidv4();
-                    zTree.addNodes(treeNode, {_id:newId, pId:treeNode._id, name:"new node" + (++newCount)});
-                    $http.post('/api/addSource',{_id:newId,level: treeNode.level + 1, pId:treeNode._id, name:"new node" + newCount}).then(function () {
-                    },function (err) {
-                        console.log(err);
-                    })
+                    zTree.addNodes(treeNode, {id:uuidv4(), pId:treeNode._id, name:"new node" + (newCount++)});
+                    return false;
                 });
             };
             function removeHoverDom(treeId, treeNode) {
                 $("#addBtn_"+treeNode.tId).unbind().remove();
             };
-            /*$http.get('/api/perList')
+            $http.get('/api/perList')
                 .success(function (data) {
                     $.fn.zTree.init($("#treeDemo"), setting, data);
                 }).err(function (err) {
 
-                });*/
-            $http.get('/api/perList')
-              .then(function (response) {
-                $.fn.zTree.init($("#treeDemo"), setting, response.data);
-              },function (err) {
-                console.log(err);
-              })
+                });
+
         });
     </script>
 </body>

@@ -29,7 +29,7 @@ function uniqeByKeys(array,keys){
         var k = obj2key(array[i], keys);
         if (!(k in hash)) {
             hash[k] = true;
-            arr .push(array[i]);
+            arr.push(array[i]);
         }
     }
     return arr ;
@@ -76,13 +76,14 @@ router.all('*',function (req, res, next) {
                         }
                     }
                 }
+
                 res.locals.navList = uniqeByKeys(navList,['name']);
                 next();
             });
         });
 
     }else {
-        res.redirect('api/login');
+        res.redirect('/api/login');
     }
 });
 router.get('/',function (req,res,next) {
@@ -93,19 +94,17 @@ router.get('/',function (req,res,next) {
 
 });
 router.get('/permission',function (req,res,next) {
-
     res.render('admin/per/permission');
 });
 
 
 //查找当前页面的权限
-function checkPermission(curName, callback) {
-
+function checkPermission(listName, curName, callback) {
     var curId = mongoose.Schema.Types.ObjectId;
-    Resource.findOne({name:'权限管理'},function (err,resource) {
+    Resource.findOne({name:listName},function (err,resource) {
         if(err) return handle(err);
         curId = resource._id;
-    })
+    });
     User.findOne({name: curName},function (err,user) {
         var actionName = [];
         if(err) return handle(err);
@@ -114,24 +113,65 @@ function checkPermission(curName, callback) {
         }).exec(function (err,role) {
             for(var i=0;i<role.length;i++){
                 for(var j=0;j<role[i].permissions.length;j++){
-                    if(role[i].permissions[j].subject.id.toString('hex')  == curId.id.toString('hex') && role[i].permissions[j].action != '权限管理'){
+                    if(role[i].permissions[j].subject.id  == curId.id && role[i].permissions[j].action != listName){
                         actionName.push(role[i].permissions[j].action);
                     }
                 }
             }
             Resource.find({pId: curId,name: actionName, level:{ $gt: 1 }},function (err,resource) {
                 callback(resource);
-            })
+            });
         });
     });
 }
 //导航栏的权限管理路由
 router.get('/perList',function (req, res, next) {
-    checkPermission(req.session.username, function (leftList) {
+    checkPermission('权限管理', req.session.username, function (leftList) {
         res.render('admin/per/permission',{
             navList: res.locals.navList,
             leftList: leftList
         });
     });
-})
+});
+router.get('/cataList',function (req, res, next) {
+  checkPermission('分类管理', req.session.username, function (leftList) {
+    res.render('admin/per/permission',{
+      navList: res.locals.navList,
+      leftList: leftList
+    });
+  });
+});
+router.get('/arcList',function (req, res, next) {
+  checkPermission('文章管理', req.session.username, function (leftList) {
+    res.render('admin/per/permission',{
+      navList: res.locals.navList,
+      leftList: leftList
+    });
+  });
+});
+/**
+ * 角色管理
+ * */
+router.get('/roleList',function (req,res,next) {
+    checkPermission('权限管理', req.session.username, function (leftList) {
+        res.render('admin/per/role',{
+            navList: res.locals.navList,
+            leftList: leftList
+        });
+    });
+});
+/**
+ * 角用户管理
+ * */
+router.get('/userMange',function (req, res, next) {
+    checkPermission('权限管理', req.session.username, function (leftList) {
+        res.render('admin/per/user',{
+            navList: res.locals.navList,
+            leftList: leftList
+        });
+    });
+});
+
+
+
 module.exports = router;

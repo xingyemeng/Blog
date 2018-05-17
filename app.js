@@ -37,7 +37,7 @@ app.use('/admin',require(__dirname+'/routers/admin.js'));
 //app.use('/admin',router); 应用级中不用路由级
 
 
-mongoose.connect('mongodb://localhost/blog',function (err) {
+mongoose.connect('mongodb://localhost/blog_me',function (err) {
     if(err){
         console.log('数据可链接失败');
     }else {

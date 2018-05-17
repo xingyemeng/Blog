@@ -6,14 +6,16 @@
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/css/common.css">
     <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/zTreeStyle.css">
     <script src="/public/js/jquery.js"></script>
     <script src="/public/js/bootstrap.min.js"></script>
     <script src="/public/js/angular.min.js"></script>
+    <script src="/public/js/jquery.ztree.all.js"></script>
+    <script src="/public/js/uuid.js"></script>
+    <script src="/public/js/md5.js"></script>
     <script>
         var blogAdmin = angular.module('blogAdmin',[]);
         blogAdmin.controller('adminCtrl',function ($scope) {
-            console.log(navList);
-            $scope.navList = navList;
         })
     </script>
 </head>
@@ -24,7 +26,7 @@
             <h3>后台管理系统</h3>
             <ul class="nav nav-pills">
                 <li class="nav-item">
-                    <a class="nav-link          active" href="/admin">
+                    <a class="nav-link active" href="/admin">
                         首页
                     </a>
                 </li>

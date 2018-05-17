@@ -1,0 +1,252 @@
+<%- include('../header') %>
+        <div class="content">
+            <div class="row">
+                <%- include('../left') %>
+                <div class="right col-9" ng-controller="perMange">
+                    <div class="container">
+                        <div class="item-head border-bottom">
+                            <div class="current">
+                                用户管理
+                            </div>
+                        </div>
+                        <div class="item-con">
+                            <p><span class="btn btn-sm btn-dark" data-toggle="modal" data-target="#addUserModal">新增用户</span></p>
+                            <div class="row">
+                                <div class="col-8">
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">用户ID</th>
+                                                <th scope="col">用户名</th>
+                                                <th scope="col">所属角色</th>
+                                                <th scope="col">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in userList">
+                                                <th scope="row">{{item._id}}</th>
+                                                <td>{{item.name}}</td>
+                                                <td><span ng-repeat="rItem in item.roles">{{rItem.name}}</span></td>
+                                                <td><a href="#" ng-click="changeUser(item)">修改</a>|<a href="#" ng-click="delUser(item)">删除</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">修改用户</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form name="userForm">
+                                                    <div class="form-group row">
+                                                        <label for="userName" class="text-right col-sm-3 col-form-label">用户名</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="username" class="form-control" id="userName" ng-model="selectedUser.name" required>
+                                                            <span ng-show="userForm.username.$dirty && userForm.username.$invalid"><span class="error" ng-show="userForm.username.$error.required" style="color:#bd2130">用户名不能为空</span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="userPassword" class="text-right col-sm-3 col-form-label">新密码</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="password" name="newpassword" class="form-control" id="userPassword" ng-model="selectedUser.newpassword" required>
+                                                            <span ng-show="userForm.newpassword.$dirty && userForm.newpassword.$invalid"><span class="error" ng-show="userForm.newpassword.$error.required" style="color:#bd2130">密码不能为空</span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="userRepassword" class="text-right col-sm-3 col-form-label">确认密码</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="password" name="repassword" class="form-control" id="userRepassword" ng-model="selectedUser.repassword" required>
+                                                            <span ng-show="userForm.repassword.$dirty || userForm.repassword.$invalid"><span class="error" ng-show="selectedUser.newpassword != selectedUser.repassword" style="color:#bd2130">两次输入密码不一致</span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="userHaveRole" class="text-right col-sm-3 col-form-label">所属角色</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="form-control" ng-click="chooseRole()" id="userHaveRole">选择角色</div>
+                                                            <!--<select id="userHaveRole" multiple="multiple" name="select" ng-model="admin" class="form-control" ng-options="uR._id as uR.name for uR in uRoles">
+                                                            </select>-->
+                                                            <ul class="form-control" style="max-height: 6rem;overflow-y: scroll;">
+                                                                <li ng-repeat="uR in uRoles">
+                                                                    <input type="checkbox" name="roleCheckbox" value="{{uR._id}}" ng-checked="checkedUser(uR)" style="margin-right: 0.5rem;" id="roleCheckbox{{$index}}">
+                                                                    <label for="roleCheckbox{{$index}}">{{uR.name}}</label>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                                <button type="button" ng-click="changeUserSave()" class="btn btn-primary" ng-disabled="userForm.$invalid || selectedUser.newpassword != selectedUser.repassword">保存</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="addUserModal">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">新增用户</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form name="addUserForm">
+                                                    <div class="form-group row">
+                                                        <label for="addUserName" class="text-right col-sm-3 col-form-label">用户名</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="username" class="form-control" ng-model="data.name" id="addUserName" required>
+                                                            <span ng-show="addUserForm.username.$dirty && addUserForm.username.$invalid"><span class="error" ng-show="addUserForm.username.$error.required" style="color:#bd2130">用户名不能为空</span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="addPassword" class="text-right col-sm-3 col-form-label">密码</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="password" name="addPassword" class="form-control" ng-model="data.password" required>
+                                                            <span ng-show="addUserForm.username.$dirty && addUserForm.username.$invalid"><span class="error" ng-show="addUserForm.username.$error.required" style="color:#bd2130">密码不能为空</span></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="addUserRole" class="text-right col-sm-3 col-form-label">所属角色</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="form-control" ng-click="chooseRole()" id="addUserRole">选择角色</div>
+                                                            <ul class="form-control" style="max-height: 6rem;overflow-y: scroll;">
+                                                                <li ng-repeat="uR in uRoles">
+                                                                    <input type="checkbox" name="addUserRole" value="{{uR._id}}" style="margin-right: 0.5rem;" id="addUserRole{{$index}}">
+                                                                    <label for="addUserRole{{$index}}">{{uR.name}}</label>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                                <button type="button" class="btn btn-primary" ng-disabled="addUserForm.$invalid" ng-click="addUserSave()">保存</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        blogAdmin.controller('perMange',function ($scope,$http) {
+
+            $scope.usersList = [];
+            $http.get('/api/userList').then(function (result) {
+                $scope.userList = result.data.userList;
+                $scope.uRoles = result.data.uRoles;
+
+            },function (err) {
+                
+            });
+            $scope.flag = false;
+            $scope.test = function (index) {
+                var oldData;
+                (function ($, undefined) {
+                    $.fn.setCursorPosition = function () {
+                        var el = $(this).get(0);
+                        var pos = 0;
+                        if ('selectionStart' in el) {
+                            el.focus();
+                            oldData = el.value;
+                            el.setSelectionRange(0,el.value.length);
+                        } else if ('selection' in document) {
+                            el.focus();
+                            var Sel = document.selection.createRange();
+                            var SelLength = document.selection.createRange().text.length;
+                            Sel.moveStart('character', -el.value.length);
+                            pos = Sel.text.length - SelLength;
+                        }
+                        return pos;
+                    }
+                })(jQuery);
+                var cruID = '#changeRole'+index;
+                $scope.flag = true;
+                var t = $(cruID).val();
+                console.log(window.selectionStart);
+                //$(cruID).attr('disabled',false).focus().val(t+' ');
+                $(cruID).attr('disabled',false).setCursorPosition();
+                $(cruID).blur(function () {
+                        $(this).attr('disabled',true);
+                        var newData = $(this).val();
+                        if(newData != oldData){
+                            $http.post('/api/userUpdate',{name: oldData, newname: newData}).then(function (result) {
+
+                            });
+                        }
+                    })
+            };
+            $scope.changeUser = function (user) {
+                /*var oldPassword = prompt('请输入原密码：');
+                if(user.password == md5(oldPassword)){
+                    $('#exampleModalCenter').modal('show');
+                    $scope.selectedUser = user;
+                    $scope.checkedUser = function (user) {
+                        var arr = $scope.selectedUser.roles;
+                        for(var i=0;i<arr.length;i++){
+                            if(arr[i].name == user.name){
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                }else {
+                    alert('密码输入错误')
+                }*/
+                $('#exampleModalCenter').modal('show');
+                $scope.selectedUser = user;
+                $scope.checkedUser = function (user) {
+                    var arr = $scope.selectedUser.roles;
+                    for(var i=0;i<arr.length;i++){
+                        if(arr[i].name == user.name){
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+            };
+            $scope.changeUserSave = function () {
+                var arr = [];
+                $('input[name="roleCheckbox"]:checked').each(function () {
+                    arr.push($(this).val());
+                });
+                $http.post('/api/changeUserSave',{id:$scope.selectedUser._id, name:$scope.selectedUser.name,password: $scope.selectedUser.newpassword,roles: arr}).then(function (result) {
+                    alert(result.data);
+                    location.reload();
+                });
+            }
+            $scope.delUser = function (user) {
+                if(confirm('确定删除用户' + user.name)){
+                    $http.post('/api/delUser',user).then(function (result) {
+                        alert('用户删除成功');
+                        location.reload();
+                    })
+                }
+            }
+            $scope.addUserSave = function () {
+                var arr = [];
+                $('input[name="addUserRole"]:checked').each(function () {
+                    arr.push($(this).val());
+                });
+                $scope.data.roles = arr;
+                $scope.data.password = md5($scope.data.password);
+                $http.post('/api/addUserSave',$scope.data).then(function (result) {
+                    $scope.userList.push(result.data);
+                    alert('添加用户成功！');
+                    location.reload();
+                })
+            }
+        });
+    </script>
+</body>
+</html>
